@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, router } from "@inertiajs/vue3";
+import { Head, router, usePage } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 
-defineProps({ employess: Object });
+const employees = usePage().props.employees as any;
+
 const NewEmployee = () => {
-    router.get("/employee/create");
+    router.get(route("employee.create"));
 };
 </script>
 
@@ -37,7 +38,7 @@ const NewEmployee = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="employee in employess">
+                            <tr v-for="employee in employees">
                                 <th
                                     scope="row"
                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"

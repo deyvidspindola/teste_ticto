@@ -32,9 +32,12 @@ class EmployeeRequest extends FormRequest
                 'lowercase',
                 'email',
                 'max:255',
-                Rule::unique(Employee::class),
+                Rule::unique(Employee::class)->ignore($this->route('id')),
             ],
-            'password' => ['required', 'string', 'max:255'],
+            'password' => [
+                $this->isMethod('post') ? 'required' : 'nullable', 
+                'string', 'max:255'
+            ],
             'role' => ['required', 'string', 'max:255'],
             'born_date' => ['required', 'date'],
             'zipcode' => ['required', 'string', 'max:10'],

@@ -20,10 +20,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     #Employer
-    Route::get('/employees', [EmployeeController::class, 'show'])->name('employees');
-    Route::get('/employee/create', [EmployeeController::class, 'create'])->name('employee.create');
-    Route::post('/employee/store', [EmployeeController::class, 'store'])->name('employee.store');
-    Route::get('/employee/edit/{$id}', [EmployeeController::class, 'edit'])->name('employee.edit');
+
+    Route::controller(EmployeeController::class)->prefix('employee')->group(function() {
+        Route::get('/', 'show')->name('employees');
+        Route::get('/create', 'create')->name('employee.create');
+        Route::post('/store', 'store')->name('employee.store');
+        Route::get('/edit/{id}', 'edit')->name('employee.edit');
+        Route::put('/update/{id}', 'update')->name('employee.update');
+    });
 });
 
 require __DIR__.'/auth.php';

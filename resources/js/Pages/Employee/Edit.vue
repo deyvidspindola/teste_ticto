@@ -1,27 +1,29 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, router, useForm } from "@inertiajs/vue3";
+import { Head, router, useForm, usePage } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import FormEmployee from "./Partails/FormEmployee.vue";
 
+const employee = usePage().props.employee as any;
+
 const form = useForm({
-    name: "",
-    document: "",
-    email: "",
+    name: employee.name,
+    document: employee.document,
+    email: employee.email,
     password: "",
-    role: "",
-    born_date: "",
-    zipcode: "",
-    district: "",
-    city: "",
-    state: "",
-    adress: "",
-    number: "",
-    complement: "",
+    role: employee.role,
+    born_date: employee.born_date,
+    zipcode: employee.zipcode,
+    district: employee.district,
+    city: employee.city,
+    state: employee.state,
+    adress: employee.adress,
+    number: employee.number,
+    complement: employee.complement,
 });
 
 const updateEmployee = () => {
-    form.post(route("employee.update"), {
+    form.put(route("employee.update", employee.id), {
         preserveScroll: true,
         onSuccess: () => form.reset(),
         onError: () => {},
@@ -39,7 +41,7 @@ const goBack = () => {
     <AuthenticatedLayout>
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                New Employee
+                Edit Employee
             </h2>
             <PrimaryButton @click="goBack()"> Prev </PrimaryButton>
         </template>

@@ -54,7 +54,7 @@ defineProps({
             <InputError :message="formData.errors.email" class="mt-2" />
         </div>
 
-        <div>
+        <div v-if="formData.password != ''">
             <InputLabel for="password" value="Password" />
 
             <TextInput

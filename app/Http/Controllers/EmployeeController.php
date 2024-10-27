@@ -8,6 +8,7 @@ use App\Models\Employee;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\EmployeeRequest;
+use Illuminate\Support\Facades\Redirect;
 
 class EmployeeController extends Controller
 {
@@ -15,7 +16,7 @@ class EmployeeController extends Controller
     {
         $emplyees = Employee::all();
         return Inertia::render('Employee/List', [
-            'employess' => $emplyees
+            'employees' => $emplyees
         ]);
     }
 
@@ -51,6 +52,23 @@ class EmployeeController extends Controller
         ]);
 
         return redirect(route('employees', absolute: false));
+    }
+
+    public function edit($id)
+    {
+        $employee = Employee::find($id);
+        return Inertia::render('Employee/Edit', [
+            'employee' => $employee
+        ]);
+    }
+
+    public function update(EmployeeRequest $request, $id)
+    {
+        $employee = Employee::find($id);
+        $data = $request->except('password');
+        $employee->update($data);
+        
+        return Redirect::route('employees'); 
     }
 
 }
