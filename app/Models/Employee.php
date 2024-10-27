@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Employee extends Model
 {
@@ -14,17 +17,18 @@ class Employee extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'user_id',
+        'manager_id',
         'name',
         'document',
         'email',
-        'password',
         'role',
         'born_date',
         'zipcode',
         'district',
         'city',
         'state',
-        'adress',
+        'address',
         'number',
         'complement'
     ];
@@ -33,4 +37,18 @@ class Employee extends Model
     protected $hidden = [
         'password'
     ];
+
+
+    public function user(): HasOne
+    {
+        return $this->hasOne(User::class);
+    }
+
+    public function manager(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
+
+
+
 }

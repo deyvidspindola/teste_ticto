@@ -13,17 +13,20 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('manager_id');
+            $table->foreign('manager_id')->references('id')->on('users');
             $table->string('name');
             $table->string('document');
             $table->string('email')->unique();
-            $table->string('password');
             $table->string('role');
             $table->date('born_date');
             $table->string('zipcode');
             $table->string('district');
             $table->string('city');
             $table->string('state');
-            $table->string('adress');
+            $table->string('address');
             $table->string('number');
             $table->string('complement')->nullable();
             $table->softDeletes();

@@ -15,7 +15,7 @@ const form = useForm({
     district: "",
     city: "",
     state: "",
-    adress: "",
+    address: "",
     number: "",
     complement: "",
 });

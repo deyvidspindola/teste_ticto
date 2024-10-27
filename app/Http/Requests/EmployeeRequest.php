@@ -13,7 +13,7 @@ class EmployeeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->role == 'admin' ? true : false;
     }
 
     /**
@@ -44,7 +44,7 @@ class EmployeeRequest extends FormRequest
             'district' => ['required', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:255'],
             'state' => ['required', 'string', 'max:255'],
-            'adress' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
             'number' => ['required', 'string', 'max:255'],
             'complement' => ['string', 'max:255'],
         ];

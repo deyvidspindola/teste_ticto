@@ -1,12 +1,44 @@
 <script setup lang="ts">
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, router, usePage } from "@inertiajs/vue3";
+import { Head, router, useForm, usePage } from "@inertiajs/vue3";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import Modal from "@/Components/Modal.vue";
+import DangerButton from "@/Components/DangerButton.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
+
+import { ref } from "vue";
 
 const employees = usePage().props.employees as any;
 
 const NewEmployee = () => {
     router.get(route("employee.create"));
+};
+
+const confirmingEmployeeDeletion = ref(false);
+var employee_Id = "";
+
+const confirDeleteEmployee = (id) => {
+    confirmingEmployeeDeletion.value = true;
+    employee_Id = id;
+};
+
+const form = useForm({});
+const deleteUser = () => {
+    form.delete(route("employee.delete", employee_Id), {
+        preserveScroll: true,
+        onSuccess: () => {
+            router.get(route("employees"));
+        },
+        onError: () => {},
+        onFinish: () => {},
+    });
+};
+
+const closeModal = () => {
+    confirmingEmployeeDeletion.value = false;
+
+    form.clearErrors();
+    form.reset();
 };
 </script>
 
@@ -62,6 +94,14 @@ const NewEmployee = () => {
                                         class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                                         >Edit</a
                                     >
+                                    &nbsp;
+                                    <a
+                                        @click="
+                                            confirDeleteEmployee(employee.id)
+                                        "
+                                        class="font-medium text-red-600 dark:text-red-500 hover:underline"
+                                        >Del</a
+                                    >
                                 </td>
                             </tr>
                         </tbody>
@@ -69,5 +109,33 @@ const NewEmployee = () => {
                 </div>
             </div>
         </div>
+        <Modal :show="confirmingEmployeeDeletion" @close="closeModal">
+            <div class="p-6">
+                <h2 class="text-lg font-medium text-gray-900">
+                    Are you sure you want to delete this employee?
+                </h2>
+
+                <p class="mt-1 text-sm text-gray-600">
+                    Once this employee is deleted, all of its resources and data
+                    will be permanently deleted. Please enter your password to
+                    confirm you would like to permanently delete your account.
+                </p>
+
+                <div class="mt-6 flex justify-end">
+                    <SecondaryButton @click="closeModal">
+                        Cancel
+                    </SecondaryButton>
+
+                    <DangerButton
+                        class="ms-3"
+                        :class="{ 'opacity-25': form.processing }"
+                        :disabled="form.processing"
+                        @click="deleteUser"
+                    >
+                        Delete Employee
+                    </DangerButton>
+                </div>
+            </div>
+        </Modal>
     </AuthenticatedLayout>
 </template>

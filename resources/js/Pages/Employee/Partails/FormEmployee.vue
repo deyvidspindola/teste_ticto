@@ -2,6 +2,7 @@
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
+// import axios from "axios";
 
 defineProps({
     formData: {
@@ -9,6 +10,10 @@ defineProps({
         required: true,
     },
 });
+
+// const findAddress = async () => {
+//     // axios.get(`https://viacep.com.br/ws/${cep}/json/`)
+// };
 </script>
 
 <template>
@@ -22,7 +27,6 @@ defineProps({
                 type="text"
                 class="mt-1 block w-full"
             />
-
             <InputError :message="formData.errors.name" class="mt-2" />
         </div>
 
@@ -54,7 +58,7 @@ defineProps({
             <InputError :message="formData.errors.email" class="mt-2" />
         </div>
 
-        <div v-if="formData.password != ''">
+        <div>
             <InputLabel for="password" value="Password" />
 
             <TextInput
@@ -113,16 +117,16 @@ defineProps({
 
     <div class="grid gap-6 mb-6 md:grid-cols-6">
         <div class="col-span-3">
-            <InputLabel for="adress" value="Adress" />
+            <InputLabel for="address" value="Address" />
 
             <TextInput
-                id="adress"
-                v-model="formData.adress"
+                id="address"
+                v-model="formData.address"
                 type="text"
                 class="mt-1 block w-full"
             />
 
-            <InputError :message="formData.errors.adress" class="mt-2" />
+            <InputError :message="formData.errors.address" class="mt-2" />
         </div>
 
         <div>
