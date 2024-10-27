@@ -20,8 +20,8 @@ const form = useForm({
     complement: "",
 });
 
-const createNewEmployee = () => {
-    form.post(route("employee.store"), {
+const updateEmployee = () => {
+    form.post(route("employee.update"), {
         preserveScroll: true,
         onSuccess: () => form.reset(),
         onError: () => {},
@@ -49,7 +49,7 @@ const goBack = () => {
                 <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
                         <form
-                            @submit.prevent="createNewEmployee"
+                            @submit.prevent="updateEmployee"
                             class="mt-6 space-y-6"
                         >
                             <FormEmployee :formData="form" />

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Inertia\Inertia;
+use App\Models\Employee;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\EmployeeRequest;
 
@@ -10,7 +13,10 @@ class EmployeeController extends Controller
 {
     public function show()
     {
-        return Inertia::render('Employee/List');
+        $emplyees = Employee::all();
+        return Inertia::render('Employee/List', [
+            'employess' => $emplyees
+        ]);
     }
 
     public function create()
@@ -20,7 +26,31 @@ class EmployeeController extends Controller
 
     public function store(EmployeeRequest $request): RedirectResponse
     {
-        dd($request);
+
+       Employee::create([
+            'name' => $request->name,
+            'document' => $request->document,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+            'born_date' => $request->born_date,
+            'zipcode' => $request->zipcode,
+            'district' => $request->district,
+            'city' => $request->city,
+            'state' => $request->state,
+            'adress' => $request->adress,
+            'number' => $request->number,
+            'complement' => $request->complement,
+        ]);
+
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'employee'
+        ]);
+
+        return redirect(route('employees', absolute: false));
     }
 
 }

@@ -37,7 +37,7 @@ class EmployeeRequest extends FormRequest
             'password' => ['required', 'string', 'max:255'],
             'role' => ['required', 'string', 'max:255'],
             'born_date' => ['required', 'date'],
-            'zipcode' => ['required', 'number', 'max:10'],
+            'zipcode' => ['required', 'string', 'max:10'],
             'district' => ['required', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:255'],
             'state' => ['required', 'string', 'max:255'],

@@ -18,7 +18,7 @@ class Employee extends Model
         'document',
         'email',
         'password',
-        'function',
+        'role',
         'born_date',
         'zipcode',
         'district',
