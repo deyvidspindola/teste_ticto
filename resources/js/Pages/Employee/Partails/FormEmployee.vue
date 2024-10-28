@@ -2,18 +2,35 @@
 import InputError from "@/Components/InputError.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
-// import axios from "axios";
+import { ref, watch, defineProps } from "vue";
+import axios from "axios";
 
-defineProps({
+const props = defineProps({
     formData: {
         type: Object,
         required: true,
     },
 });
 
-// const findAddress = async () => {
-//     // axios.get(`https://viacep.com.br/ws/${cep}/json/`)
-// };
+const zipcode = ref(props.formData.zipcode);
+
+watch(
+    () => props.formData.zipcode,
+    (newVal) => {
+        zipcode.value = newVal;
+    }
+);
+
+const findAddress = async () => {
+    await axios
+        .get(`https://viacep.com.br/ws/${zipcode.value}/json/`)
+        .then((response) => {
+            props.formData.address = response.data.logradouro;
+            props.formData.district = response.data.bairro;
+            props.formData.city = response.data.localidade;
+            props.formData.state = response.data.estado;
+        });
+};
 </script>
 
 <template>
@@ -107,6 +124,7 @@ defineProps({
             <TextInput
                 id="zipcode"
                 v-model="formData.zipcode"
+                @focusout="findAddress"
                 type="text"
                 class="mt-1 block w-full"
             />
