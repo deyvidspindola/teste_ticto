@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CheckpointController;
+use App\Http\Controllers\DashboardController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
@@ -11,9 +12,8 @@ Route::get('/', function () {
     return redirect('login');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/dashboard', [DashboardController::class, 'show'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function () {
     #CheckPont
     Route::controller(CheckpointController::class)->prefix('checkpoint')->group(function(){
         Route::get('/', 'show')->name('checkpoint');
+        Route::post('/', 'doCheckPoint')->name('checkpoint.post');
+        Route::post('/filter', 'filter')->name('checkpoint.filter');
     });
 
 });
