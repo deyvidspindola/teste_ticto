@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('manager_id');
             $table->foreign('manager_id')->references('id')->on('users');
             $table->string('name');
-            $table->string('document');
+            $table->string('document')->unique();
             $table->string('email')->unique();
             $table->string('role');
             $table->date('born_date');

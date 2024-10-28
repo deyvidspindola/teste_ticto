@@ -25,7 +25,12 @@ class EmployeeRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'document' => ['required', 'string', 'max:14'],
+            'document' => [
+                'required', 
+                'string', 
+                'max:14',
+                Rule::unique(Employee::class)->ignore($this->route('id')),
+            ],
             'email' => [
                 'required',
                 'string',
@@ -46,7 +51,6 @@ class EmployeeRequest extends FormRequest
             'state' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
             'number' => ['required', 'string', 'max:255'],
-            'complement' => ['string', 'max:255'],
         ];
     }
 }
