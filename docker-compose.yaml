@@ -1,0 +1,24 @@
+services:
+  mysql:
+    container_name: checkpoint_mysql
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: checkpoint_database
+      MYSQL_USER: admin_user
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: checkpoint_database
+    volumes:
+      - ./db_mysql:/var/lib/mysql
+      - ./mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+    ports:
+      - "3306:3306"
+    networks:
+      - checkpoint-app-network
+
+networks:
+  checkpoint-app-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
