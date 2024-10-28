@@ -10,14 +10,20 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    edit: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const zipcode = ref(props.formData.zipcode);
+const document = ref(props.formData.document);
 
 watch(
-    () => props.formData.zipcode,
-    (newVal) => {
-        zipcode.value = newVal;
+    () => [props.formData.zipcode, props.formData.document],
+    ([newZipCode, newDocument]) => {
+        zipcode.value = newZipCode;
+        document.value = newDocument;
     }
 );
 
@@ -30,6 +36,51 @@ const findAddress = async () => {
             props.formData.city = response.data.localidade;
             props.formData.state = response.data.estado;
         });
+};
+
+const validateDocument = (document) => {
+    document = document.replace(/\D/g, "");
+    if (document.length !== 11 || /^(\d)\1{10}$/.test(document)) return false;
+
+    let sum = 0;
+    let remainder;
+
+    for (let i = 1; i <= 9; i++) {
+        sum += parseInt(document[i - 1]) * (11 - i);
+    }
+    remainder = (sum * 10) % 11;
+    if (remainder === 10 || remainder === 11) remainder = 0;
+    if (remainder !== parseInt(document[9])) return false;
+
+    sum = 0;
+
+    for (let i = 1; i <= 10; i++) {
+        sum += parseInt(document[i - 1]) * (12 - i);
+    }
+    remainder = (sum * 10) % 11;
+    if (remainder === 10 || remainder === 11) remainder = 0;
+    if (remainder !== parseInt(document[10])) return false;
+
+    return true;
+};
+
+const validadeEmployeeDocument = () => {
+    if (!validateDocument(props.formData.document)) {
+        props.formData.errors.document = "Invalid Document.";
+    } else {
+        props.formData.errors.document = "";
+    }
+};
+
+const allowOnlyNumbers = (event) => {
+    if (!/[0-9]/.test(event.key) && event.key !== "Backspace") {
+        event.preventDefault();
+    }
+};
+
+const formatInput = (event) => {
+    // Remove non-numeric characters from the input
+    props.formData.document = props.formData.document.replace(/\D/g, "");
 };
 </script>
 
@@ -51,7 +102,11 @@ const findAddress = async () => {
             <InputLabel for="documment" value="Document" />
 
             <TextInput
+                maxlength="11"
                 id="document"
+                @focusout="validadeEmployeeDocument"
+                @keypress="allowOnlyNumbers"
+                @input="formatInput"
                 v-model="formData.document"
                 type="text"
                 class="mt-1 block w-full"
@@ -75,7 +130,7 @@ const findAddress = async () => {
             <InputError :message="formData.errors.email" class="mt-2" />
         </div>
 
-        <div>
+        <div v-if="!props.edit">
             <InputLabel for="password" value="Password" />
 
             <TextInput
@@ -122,8 +177,10 @@ const findAddress = async () => {
             <InputLabel for="zipcode" value="Zip Code" />
 
             <TextInput
+                maxlength="8"
                 id="zipcode"
                 v-model="formData.zipcode"
+                @keypress="allowOnlyNumbers"
                 @focusout="findAddress"
                 type="text"
                 class="mt-1 block w-full"

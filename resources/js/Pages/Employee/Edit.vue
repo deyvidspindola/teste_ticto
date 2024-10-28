@@ -54,7 +54,7 @@ const goBack = () => {
                             @submit.prevent="updateEmployee"
                             class="mt-6 space-y-6"
                         >
-                            <FormEmployee :formData="form" />
+                            <FormEmployee :formData="form" :edit="true" />
 
                             <div class="flex items-center gap-4">
                                 <PrimaryButton :disabled="form.processing"
